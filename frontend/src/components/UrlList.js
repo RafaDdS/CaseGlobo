@@ -1,12 +1,29 @@
 import { useState, useEffect } from 'react';
 import axios from "axios";
 
-import { List, ListItem, ListItemText, IconButton, Box } from '@mui/material';
-import { DeleteForever as DeleteIcon, Edit as EditIcon } from '@mui/icons-material';
-import AddUrlInterface from './AddUrlInterface.js';
+import {
+	List,
+	ListItem,
+	ListItemText,
+	IconButton,
+	Box,
+	Dialog,
+	DialogTitle,
+	DialogContent,
+} from '@mui/material';
+import {
+	DeleteForever as DeleteIcon,
+	Edit as EditIcon,
+	PlayArrow as PlayIcon,
+} from '@mui/icons-material';
+import UrlDataInterface from './UrlDataInterface.js';
+import YouTube from 'react-youtube';
 
 function UrlList() {
 	const [urls, setUrls] = useState([]);
+	const [openModal, setOpenModal] = useState(false);
+	const [editingKey, setEditingKey] = useState(-1);
+	const [videoId, setVideoId] = useState("");
 
 	const updateList = () => {
 		axios.get(`/api/urls/`)
@@ -14,13 +31,24 @@ function UrlList() {
 			.catch((err) => console.log(err));
 	}
 
-	const handleUpdate = (item) => {
-		axios.put(`/api/urls/${item.key}/`, {
+	const handleAdd = async (item) => {
+		return axios.post("/api/urls/", {
 			...item,
-			url: "https://www.a.com",
+			created: new Date().toISOString(),
+			lastModified: new Date().toISOString(),
+		}).then((res) => updateList());
+	}
+
+	const handleUpdate = async (item) => {
+		return axios.put(`/api/urls/${editingKey}/`, {
+			...item,
+			created: urls.find(item => item.key === editingKey)?.created,
 			lastModified: new Date().toISOString(),
 		})
-			.then((res) => updateList());
+			.then((res) => {
+				updateList();
+				handleCloseModal();
+			});
 	};
 
 	const handleDelete = (key) => {
@@ -28,11 +56,56 @@ function UrlList() {
 			.then((res) => updateList());
 	};
 
+	const handleOpenModal = (key) => {
+		setOpenModal(true);
+		setEditingKey(key);
+	};
+
+	const handleCloseModal = () => {
+		setOpenModal(false);
+		setEditingKey(-1);
+	};
+
+	const handleOpenVideo = (link) => {
+		var regex = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]{11}).*/;
+		var match = link.match(regex);
+
+		if (match && match[7]) {
+			setVideoId(match[7]);
+		}
+	};
+
 	useEffect(() => {
 		updateList();
 	}, []);
 
 	return (<Box>
+		<Dialog
+			open={openModal}
+			onClose={handleCloseModal}
+			aria-labelledby="edditing-modal"
+			aria-modal="true"
+		>
+			<DialogTitle sx={{ m: 0, p: 2 }}>
+				Editar
+			</DialogTitle>
+			<DialogContent dividers>
+				<UrlDataInterface
+					confirmCallback={handleUpdate}
+					defaultItem={urls.find(item => item.key === editingKey)} />
+			</DialogContent>
+		</Dialog>
+		{videoId ?
+			<YouTube
+				videoId={videoId}
+				opts={{
+					height: '390',
+					width: '640',
+					playerVars: {
+						autoplay: 1,
+					}
+				}} /> : null}
+
 		<List>
 			{urls.map((value) => (
 				<ListItem
@@ -41,7 +114,11 @@ function UrlList() {
 					secondaryAction={
 						<>
 							<IconButton
-								onClick={() => handleUpdate(value)}>
+								onClick={() => handleOpenVideo(value.url)}>
+								<PlayIcon />
+							</IconButton>
+							<IconButton
+								onClick={() => handleOpenModal(value.key)}>
 								<EditIcon />
 							</IconButton>
 							<IconButton
@@ -55,7 +132,8 @@ function UrlList() {
 				</ListItem>
 			))}
 		</List>
-		<AddUrlInterface addCalback={updateList} />
+		<UrlDataInterface
+			confirmCallback={handleAdd} />
 	</Box>
 	);
 }
