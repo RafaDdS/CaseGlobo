@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-2=5wizf50axi1xy*l@1t-_^r(!@&i1u$1y+vs=to$0yritp1!u
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [ '*' ]
 
 
 # Application definition
@@ -77,10 +77,15 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+import os
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('POSTGRES_NAME'),
+        'USER': os.environ.get('POSTGRES_USER'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+        'HOST':  os.environ.get('POSTGRES_HOST'),
+        'PORT': 5432,
     }
 }
 
@@ -126,7 +131,7 @@ STATIC_URL = 'django_static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-REACT_APP_BUILD_PATH = "../frontend/build"
+REACT_APP_BUILD_PATH = "./frontend/build"
 
 CORS_ORIGIN_WHITELIST = [
      'http://localhost:3000'

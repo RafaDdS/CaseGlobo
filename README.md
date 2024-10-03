@@ -1,20 +1,19 @@
 # CaseGlobo
-Interface simples para salvar e assistir videos do youtube.
+Interface simples para salvar e assistir videos do youtube. Você pode acessar https://case-globo-batata.onrender.com/ 
+
+## Dependencias
+python3 >= 3.6, < 3.9
+Node
+Docker
 
 ## Executar localmente
-<Install python3 >= 3.8>
-Terminal 1
-pip install pipenv
-
-pipenv install
-pipenv shell
-
-cd backend/
-python manage.py migrate
-python manage.py runserver
-
-Terminal 2
-cd frontend/
-npm start
+git pull https://github.com/RafaDdS/CaseGlobo
+npm run build --prefix frontend
+docker build .
+docker compose up
 
 ## Deploy
+? docker login
+
+docker build . -t {user/image:tag}
+docker push {user/image:tag}
