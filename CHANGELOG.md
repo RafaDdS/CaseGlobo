@@ -17,10 +17,10 @@
 ## Melhorias
 - Apresentação de falhas no frontend. (Exemplo: Url inválido)
 - Adicionar páginas de falha do backend. (Exemplo: 404)
-- Adicionar campos opcionais como titulo e descrição e foto.
-- Dockerizar a plataforma.
+- Adicionar campos opcionais como titulo e descrição e foto no modelo da url.
 - Melhorar a interface.
 - Adicionar login.
 - Filtrar acesso dos usuários aos seus urls.
-- Proteger a API contra ataques. (Exemplo: Limitar acessos de um mesmo IP)
-- Adicionar reprodução dos vídeos através da plataforma.
+- Proteger a API contra ataques. (Exemplo: Limitar acessos de um mesmo IP).
+- Automatizar o processo de deploy.
+
