@@ -10,6 +10,7 @@ import {
 	Dialog,
 	DialogTitle,
 	DialogContent,
+	Typography,
 } from '@mui/material';
 import {
 	DeleteForever as DeleteIcon,
@@ -18,6 +19,7 @@ import {
 } from '@mui/icons-material';
 import UrlDataInterface from './UrlDataInterface.js';
 import YouTube from 'react-youtube';
+
 
 function UrlList() {
 	const [urls, setUrls] = useState([]);
@@ -79,7 +81,11 @@ function UrlList() {
 		updateList();
 	}, []);
 
-	return (<Box>
+	return (<Box
+		sx={{
+			borderRadius: 1,
+			bgcolor: "#d4e0d2",
+		}}>
 		<Dialog
 			open={openModal}
 			onClose={handleCloseModal}
@@ -105,33 +111,40 @@ function UrlList() {
 						autoplay: 1,
 					}
 				}} /> : null}
-
-		<List>
-			{urls.map((value) => (
-				<ListItem
-					key={value.key}
-					disableGutters
-					secondaryAction={
-						<>
-							<IconButton
-								onClick={() => handleOpenVideo(value.url)}>
-								<PlayIcon />
-							</IconButton>
-							<IconButton
-								onClick={() => handleOpenModal(value.key)}>
-								<EditIcon />
-							</IconButton>
-							<IconButton
-								onClick={() => handleDelete(value.key)}>
-								<DeleteIcon />
-							</IconButton>
-						</>
-					}
-				>
-					<ListItemText primary={value.url} />
-				</ListItem>
-			))}
-		</List>
+		{urls.length > 0 ?
+			<List>
+				{urls.map((value) => (
+					<ListItem
+						key={value.key}
+						disableGutters
+						secondaryAction={
+							<>
+								<IconButton
+									onClick={() => handleOpenVideo(value.url)}>
+									<PlayIcon />
+								</IconButton>
+								<IconButton
+									onClick={() => handleOpenModal(value.key)}>
+									<EditIcon />
+								</IconButton>
+								<IconButton
+									onClick={() => handleDelete(value.key)}>
+									<DeleteIcon />
+								</IconButton>
+							</>
+						}
+					>
+						<ListItemText primary={
+							<Typography variant="body1" component="h2">
+								{value.url}
+							</Typography>} />
+					</ListItem>
+				))}
+			</List> :
+			<Typography variant="h5" component="h3">
+				A sua lista de links está vazia! Vamos começar a adicionar
+			</Typography>
+		}
 		<UrlDataInterface
 			confirmCallback={handleAdd} />
 	</Box>

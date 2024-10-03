@@ -10,7 +10,7 @@ Docker
 ## Executar localmente
 Execute os seguintes comandos
 ```bash
-git pull https://github.com/RafaDdS/CaseGlobo
+git clone https://github.com/RafaDdS/CaseGlobo
 cd CaseGlobo/
 npm install --prefix frontend
 npm run build --prefix frontend

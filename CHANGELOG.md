@@ -1,4 +1,4 @@
-# Versão 0.1 - Mínima
+# Versão 1.0 - Final
 
 ## Funcionalidades
 - Ler urls.
@@ -15,12 +15,11 @@
 - A plataforma apenas aceita urls com os schemas "http" e "https" inclusos. Isso pode ser considerado uma UX ruim.
 
 ## Melhorias
-- Apresentação de falhas no frontend. (Exemplo: Url inválido)
-- Adicionar páginas de falha do backend. (Exemplo: 404)
 - Adicionar campos opcionais como titulo e descrição e foto no modelo da url.
 - Melhorar a interface.
 - Adicionar login.
 - Filtrar acesso dos usuários aos seus urls.
 - Proteger a API contra ataques. (Exemplo: Limitar acessos de um mesmo IP).
+- Realizar o deploy do frontend para um endereço estático
 - Automatizar o processo de deploy.
 
